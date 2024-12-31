@@ -48,6 +48,12 @@ public class CameraController : MonoBehaviour
 
     private void OnLook(InputAction.CallbackContext context)
     {
+        //skip processing if the game is paused
+        if (Time.timeScale == 0f)
+        {
+            return;
+        }
+
         // Read the mouse delta (Vector2)
         Vector2 lookDelta = context.ReadValue<Vector2>();
 
