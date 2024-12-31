@@ -66,5 +66,12 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 1f;//Resume the game
         SceneManager.LoadScene(0);
     }
+    public void LoadScene(string sceneName)
+    {
+        Debug.Log($"Loading scene: {sceneName}");
+        Time.timeScale = 1f; // Resume the game before loading the scene
+        SceneManager.LoadScene(sceneName);
+    }
+
 
 }
