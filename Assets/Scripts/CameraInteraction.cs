@@ -10,6 +10,10 @@ public class CameraInteraction : MonoBehaviour
     [Tooltip("How far the player can interact with objects in front of them.")]
     public float interactDistance = 5f;  // Exposed distance so you can tweak in Inspector
 
+    private Collectible currentCollectible = null; // Track the current collectible being hovered
+
+
+
     private void Awake()
     {
         // Create and enable the input actions
@@ -27,12 +31,43 @@ public class CameraInteraction : MonoBehaviour
     {
         // Unsubscribe when disabled to avoid leaks
         inputActions.Player.Interact.performed -= OnInteract;
+        // Disable the input actions
+        inputActions.Disable();
     }
 
     private void Update()
     {
         // Draw a debug ray in Scene View so you can visualize where the camera is pointing
         Debug.DrawRay(transform.position, transform.forward * interactDistance, Color.red);
+
+        // Raycast for hover detection
+        Ray ray = new Ray(transform.position, transform.forward);
+        if (Physics.Raycast(ray, out RaycastHit hit, interactDistance))
+        {
+            Collectible collectible = hit.collider.GetComponent<Collectible>();
+
+            if (collectible != currentCollectible) 
+            {
+                if (currentCollectible != null)
+                {
+                    currentCollectible.ShowTooltip(false);
+                }
+                if (collectible != null)
+                {
+                    collectible.ShowTooltip(true);
+                }
+                currentCollectible = collectible;
+            }
+
+    }
+        else
+        {
+            if (currentCollectible != null)
+            {
+                currentCollectible.ShowTooltip(false);
+                currentCollectible = null;
+            }
+        }
     }
 
     private void OnInteract(InputAction.CallbackContext context)
@@ -54,6 +89,12 @@ public class CameraInteraction : MonoBehaviour
             if (spinTarget != null)
             {
                 spinTarget.ToggleSpin();
+                return;
+            }
+            Collectible collectible = hit.collider.GetComponent<Collectible>();
+            if (collectible != null)
+            {
+                collectible.Interact();
                 return;
             }
 

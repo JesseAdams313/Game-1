@@ -5,6 +5,7 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+
     [Header("Player Stats")]
     public int maxHealth = 100; // Max player health
     public int currentHealth;   // Current player health
@@ -85,6 +86,9 @@ public class GameManager : MonoBehaviour
         levelCompletePanel.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+        // Pause the game
+        Time.timeScale = 0f;
+
     }
 
     public void ContinueLevel()

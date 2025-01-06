@@ -44,6 +44,8 @@ public class CameraController : MonoBehaviour
         // Unsubscribe
         inputActions.Player.Look.performed -= OnLook;
         inputActions.Player.Look.canceled -= OnLook;
+        //disable the input actions
+        inputActions.Disable();
     }
 
     private void OnLook(InputAction.CallbackContext context)
